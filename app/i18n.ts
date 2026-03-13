@@ -19,6 +19,11 @@ if (!i18n.isInitialized) {
         sv: { translation: sv },
       },
       supportedLngs,
+      // Strip region subtags (e.g. fi-FI → fi, sv-SE → sv) so browser
+      // locale tags always resolve to a supported language instead of
+      // falling back to English.
+      load: "languageOnly",
+      nonExplicitSupportedLngs: true,
       fallbackLng: "en",
       interpolation: {
         escapeValue: false,
