@@ -1,3 +1,5 @@
+import { NAV_HEIGHT } from "../constants";
+
 export default function About() {
   return (
     <main
@@ -5,7 +7,7 @@ export default function About() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "calc(100vh - 52px)",
+        minHeight: `calc(100vh - ${NAV_HEIGHT})`,
         fontFamily: "Arial, sans-serif",
         backgroundColor: "#f0f4f8",
       }}
