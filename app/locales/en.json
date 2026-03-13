@@ -1,6 +1,14 @@
 {
   "greeting": "Hello, World! 👋",
   "welcome": "Welcome to this Next.js demo.",
+  "nav": {
+    "home": "Home",
+    "about": "About"
+  },
+  "about": {
+    "title": "About Us",
+    "body": "About Us — Coming Soon"
+  },
   "languageSwitcher": {
     "label": "Language",
     "en": "EN",

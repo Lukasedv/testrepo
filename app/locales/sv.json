@@ -1,6 +1,14 @@
 {
   "greeting": "Hej, Världen! 👋",
   "welcome": "Välkommen till denna Next.js-demo.",
+  "nav": {
+    "home": "Hem",
+    "about": "Om oss"
+  },
+  "about": {
+    "title": "Om oss",
+    "body": "Om oss — Kommer snart"
+  },
   "languageSwitcher": {
     "label": "Språk",
     "en": "EN",

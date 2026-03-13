@@ -1,6 +1,14 @@
 {
   "greeting": "Hei, Maailma! 👋",
   "welcome": "Tervetuloa tähän Next.js-demoon.",
+  "nav": {
+    "home": "Etusivu",
+    "about": "Tietoja"
+  },
+  "about": {
+    "title": "Tietoja meistä",
+    "body": "Tietoja meistä — Tulossa pian"
+  },
   "languageSwitcher": {
     "label": "Kieli",
     "en": "EN",
