@@ -1,6 +1,11 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { NAV_HEIGHT } from "../constants";
 
 export default function About() {
+  const { t } = useTranslation();
+
   return (
     <main
       style={{
@@ -22,10 +27,10 @@ export default function About() {
         }}
       >
         <h1 style={{ fontSize: "2.5rem", color: "#2d3748", marginBottom: "0.5rem" }}>
-          About Us
+          {t("about.title")}
         </h1>
         <p style={{ fontSize: "1.2rem", color: "#718096" }}>
-          About Us — Coming Soon
+          {t("about.body")}
         </p>
       </div>
     </main>
