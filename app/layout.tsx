@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NavBar from "./components/NavBar";
 
 export const metadata: Metadata = {
   title: "Hello World - Next.js Demo",
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NavBar />
+        {children}
+      </body>
     </html>
   );
 }
