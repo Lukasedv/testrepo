@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import I18nProvider from "./components/I18nProvider";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 
 export const metadata: Metadata = {
   title: "Hello World - Next.js Demo",
@@ -12,7 +14,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <I18nProvider>
+          <LanguageSwitcher />
+          {children}
+        </I18nProvider>
+      </body>
     </html>
   );
 }

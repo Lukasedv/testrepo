@@ -1,0 +1,10 @@
+{
+  "greeting": "Hei, Maailma! 👋",
+  "welcome": "Tervetuloa tähän Next.js-demoon.",
+  "languageSwitcher": {
+    "label": "Kieli",
+    "en": "EN",
+    "fi": "FIN",
+    "sv": "SWE"
+  }
+}

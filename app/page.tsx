@@ -1,4 +1,10 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
+
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
     <main
       style={{
@@ -20,10 +26,10 @@ export default function Home() {
         }}
       >
         <h1 style={{ fontSize: "3rem", color: "#2d3748", marginBottom: "0.5rem" }}>
-          Hello, World! 👋
+          {t("greeting")}
         </h1>
         <p style={{ fontSize: "1.2rem", color: "#718096" }}>
-          Welcome to this Next.js demo.
+          {t("welcome")}
         </p>
       </div>
     </main>

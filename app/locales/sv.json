@@ -1,0 +1,10 @@
+{
+  "greeting": "Hej, Världen! 👋",
+  "welcome": "Välkommen till denna Next.js-demo.",
+  "languageSwitcher": {
+    "label": "Språk",
+    "en": "EN",
+    "fi": "FIN",
+    "sv": "SWE"
+  }
+}
