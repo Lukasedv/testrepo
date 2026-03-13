@@ -12,6 +12,10 @@
   --color-toggle-bg: #4a5568;
   --color-toggle-text: #ffffff;
   --color-toggle-border: #718096;
+  --color-select-bg: #ffffff;
+  --color-select-text: #2d3748;
+  --color-select-border: #cbd5e0;
+  --color-label-text: #2d3748;
 }
 
 /* ─── Dark theme ─────────────────────────────────────────────────────────── */
@@ -27,6 +31,10 @@
   --color-toggle-bg: #2d3748;
   --color-toggle-text: #e2e8f0;
   --color-toggle-border: #4a5568;
+  --color-select-bg: #2d3748;
+  --color-select-text: #e2e8f0;
+  --color-select-border: #4a5568;
+  --color-label-text: #e2e8f0;
 }
 
 /* ─── OS-level fallback when no data-theme attribute is present ───────────── */
@@ -43,6 +51,10 @@
     --color-toggle-bg: #2d3748;
     --color-toggle-text: #e2e8f0;
     --color-toggle-border: #4a5568;
+    --color-select-bg: #2d3748;
+    --color-select-text: #e2e8f0;
+    --color-select-border: #4a5568;
+    --color-label-text: #e2e8f0;
   }
 }
 
