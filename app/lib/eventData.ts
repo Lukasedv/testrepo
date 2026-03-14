@@ -224,28 +224,36 @@ export function saveCustomEvents(events: Event[]): void {
 }
 
 export function getAllEvents(): Event[] {
-  return [...MOCK_EVENTS, ...getCustomEvents()];
+  const custom = getCustomEvents();
+  const customIds = new Set(custom.map((e) => e.id));
+  // Custom events override mock events with the same id
+  return [
+    ...MOCK_EVENTS.filter((e) => !customIds.has(e.id)),
+    ...custom,
+  ];
 }
 
 export function getEventById(id: string): Event | undefined {
   return getAllEvents().find((e) => e.id === id);
 }
 
-export function formatEventDate(isoString: string): string {
+export function formatEventDate(isoString: string, timezone: string): string {
   const date = new Date(isoString);
   return date.toLocaleDateString("en-GB", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: timezone,
   });
 }
 
-export function formatEventTime(isoString: string): string {
+export function formatEventTime(isoString: string, timezone: string): string {
   const date = new Date(isoString);
   return date.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: timezone,
   });
 }
 
@@ -259,7 +267,15 @@ export function generateIcsContent(event: Event): string {
     const d = new Date(iso);
     return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   };
-  const escape = (s: string) => s.replace(/,/g, "\\,").replace(/\n/g, "\\n");
+  // RFC 5545 escaping: backslashes, semicolons, commas, newlines
+  const escape = (s: string) =>
+    s
+      .replace(/\\/g, "\\\\")
+      .replace(/;/g, "\\;")
+      .replace(/,/g, "\\,")
+      .replace(/\n/g, "\\n");
+
+  const dtstamp = formatIcsDate(new Date().toISOString());
 
   return [
     "BEGIN:VCALENDAR",
@@ -267,6 +283,7 @@ export function generateIcsContent(event: Event): string {
     "PRODID:-//Events App//EN",
     "BEGIN:VEVENT",
     `UID:${event.id}@events-app`,
+    `DTSTAMP:${dtstamp}`,
     `DTSTART:${formatIcsDate(event.startAt)}`,
     `DTEND:${formatIcsDate(event.endAt)}`,
     `SUMMARY:${escape(event.title)}`,

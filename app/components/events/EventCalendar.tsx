@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { Event, isPastEvent } from "../../lib/eventData";
 
 interface Props {
@@ -11,12 +12,6 @@ interface Props {
   onNext: () => void;
   onToday: () => void;
 }
-
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
 
 function getDaysInMonth(year: number, month: number): number {
   return new Date(year, month + 1, 0).getDate();
@@ -37,6 +32,23 @@ export default function EventCalendar({
   onNext,
   onToday,
 }: Props) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language || "en";
+
+  // Locale-aware month/year label
+  const monthLabel = new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month, 1));
+
+  // Locale-aware weekday headers (Mon-based: Mon=0...Sun=6)
+  // 2024-01-01 is a Monday — use it as anchor
+  const weekdays = Array.from({ length: 7 }, (_, i) =>
+    new Intl.DateTimeFormat(locale, { weekday: "short" })
+      .format(new Date(2024, 0, 1 + i))
+      .toUpperCase()
+  );
+
   const daysInMonth = getDaysInMonth(year, month);
   const firstWeekday = getFirstWeekdayOfMonth(year, month);
   const today = new Date();
@@ -74,13 +86,13 @@ export default function EventCalendar({
           gap: "0.5rem",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: "1.4rem", color: "#2d3748" }}>
-          {MONTH_NAMES[month]} {year}
+        <h2 style={{ margin: 0, fontSize: "1.4rem", color: "#2d3748", textTransform: "capitalize" }}>
+          {monthLabel}
         </h2>
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <button
             onClick={onPrev}
-            aria-label="Previous month"
+            aria-label={t("events.prevMonth")}
             style={navBtnStyle}
           >
             ‹
@@ -93,11 +105,11 @@ export default function EventCalendar({
               fontSize: "0.85rem",
             }}
           >
-            Today
+            {t("events.today")}
           </button>
           <button
             onClick={onNext}
-            aria-label="Next month"
+            aria-label={t("events.nextMonth")}
             style={navBtnStyle}
           >
             ›
@@ -108,14 +120,14 @@ export default function EventCalendar({
       {/* Weekday headers */}
       <div
         role="grid"
-        aria-label={`Calendar for ${MONTH_NAMES[month]} ${year}`}
+        aria-label={monthLabel}
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(7, 1fr)",
           gap: "2px",
         }}
       >
-        {WEEKDAYS.map((wd) => (
+        {weekdays.map((wd) => (
           <div
             key={wd}
             role="columnheader"
@@ -153,7 +165,7 @@ export default function EventCalendar({
             <div
               key={day}
               role="gridcell"
-              aria-label={`${day} ${MONTH_NAMES[month]}`}
+              aria-label={new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" }).format(new Date(year, month, day))}
               style={{
                 minHeight: "80px",
                 padding: "0.4rem",
@@ -221,7 +233,7 @@ export default function EventCalendar({
             fontStyle: "italic",
           }}
         >
-          No events this month.
+          {t("events.noEventsThisMonth")}
         </p>
       )}
     </div>
@@ -252,3 +264,4 @@ const navBtnStyle: React.CSSProperties = {
   color: "#2d3748",
   fontFamily: "Arial, sans-serif",
 };
+

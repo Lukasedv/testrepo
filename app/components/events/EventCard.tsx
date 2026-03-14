@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Event, isPastEvent } from "../../lib/eventData";
 import { getCategoryColor } from "./EventCalendar";
 
@@ -11,17 +12,20 @@ interface Props {
 }
 
 export default function EventCard({ event, userRsvped, showAdminBadge }: Props) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language || "en";
   const past = isPastEvent(event);
   const startDate = new Date(event.startAt);
   const endDate = new Date(event.endAt);
 
-  const dateLabel = startDate.toLocaleDateString("en-GB", {
+  const dateLabel = startDate.toLocaleDateString(locale, {
     weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: event.timezone,
   });
-  const timeLabel = `${startDate.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })} – ${endDate.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
+  const timeLabel = `${startDate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: event.timezone })} – ${endDate.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: event.timezone })}`;
 
   const spotsLeft =
     event.capacity !== null ? event.capacity - event.rsvpCount : null;
@@ -83,7 +87,7 @@ export default function EventCard({ event, userRsvped, showAdminBadge }: Props) 
                 textTransform: "uppercase",
               }}
             >
-              Past
+              {t("events.pastBadge")}
             </span>
           )}
           {showAdminBadge && event.status === "draft" && (
@@ -98,7 +102,7 @@ export default function EventCard({ event, userRsvped, showAdminBadge }: Props) 
                 border: "1px solid #f6e05e",
               }}
             >
-              Draft
+              {t("events.draftBadge")}
             </span>
           )}
           {userRsvped && (
@@ -112,7 +116,7 @@ export default function EventCard({ event, userRsvped, showAdminBadge }: Props) 
                 borderRadius: "10px",
               }}
             >
-              Going ✓
+              {t("events.going")}
             </span>
           )}
           {isFull && (
@@ -126,7 +130,7 @@ export default function EventCard({ event, userRsvped, showAdminBadge }: Props) 
                 borderRadius: "10px",
               }}
             >
-              Full
+              {t("events.fullBadge")}
             </span>
           )}
         </div>
@@ -172,11 +176,12 @@ export default function EventCard({ event, userRsvped, showAdminBadge }: Props) 
             marginTop: "0.25rem",
           }}
         >
-          👥 {event.rsvpCount} RSVPs
-          {spotsLeft !== null && !isFull && ` · ${spotsLeft} spots left`}
-          {isFull && " · Event Full"}
+          👥 {event.rsvpCount} {t("events.rsvps")}
+          {spotsLeft !== null && !isFull && ` · ${spotsLeft} ${t("events.spotsLeft")}`}
+          {isFull && ` · ${t("events.eventFull")}`}
         </div>
       </div>
     </Link>
   );
 }
+

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Event,
@@ -9,20 +10,23 @@ import {
   getCustomEvents,
   saveCustomEvents,
   MOCK_EVENTS,
+  isAdmin,
 } from "../../../lib/eventData";
-import { EventForm } from "../../new/page";
+import { EventForm } from "../../../components/events/EventForm";
 import { NAV_HEIGHT } from "../../../constants";
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
-
-export default function EditEventPage({ params }: Props) {
-  const { id } = use(params);
+export default function EditEventPage() {
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { t } = useTranslation();
   const [event, setEvent] = useState<Event | null>(null);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
+    if (!isAdmin()) {
+      setUnauthorized(true);
+      return;
+    }
     const ev = getAllEvents().find((e) => e.id === id);
     setEvent(ev ?? null);
   }, [id]);
@@ -45,6 +49,29 @@ export default function EditEventPage({ params }: Props) {
     router.push(`/events/${event.id}`);
   };
 
+  if (unauthorized) {
+    return (
+      <main
+        style={{
+          minHeight: `calc(100vh - ${NAV_HEIGHT})`,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <p style={{ color: "#e53e3e", fontSize: "1.1rem", marginBottom: "0.75rem" }}>
+            Unauthorized
+          </p>
+          <Link href="/events" style={{ color: "#3182ce" }}>
+            {t("events.backToEvents")}
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
   if (!event) {
     return (
       <main
@@ -57,8 +84,8 @@ export default function EditEventPage({ params }: Props) {
         }}
       >
         <div style={{ textAlign: "center" }}>
-          <p style={{ color: "#718096" }}>Event not found.</p>
-          <Link href="/events" style={{ color: "#3182ce" }}>← Back to Events</Link>
+          <p style={{ color: "#718096" }}>{t("events.notFound")}</p>
+          <Link href="/events" style={{ color: "#3182ce" }}>{t("events.backToEvents")}</Link>
         </div>
       </main>
     );
@@ -86,7 +113,7 @@ export default function EditEventPage({ params }: Props) {
             marginBottom: "1.25rem",
           }}
         >
-          ← Back to Event
+          {t("events.backToEvent")}
         </Link>
         <div
           style={{
@@ -97,8 +124,8 @@ export default function EditEventPage({ params }: Props) {
           }}
         >
           <EventForm
-            title={`Edit: ${event.title}`}
-            submitLabel="Save Changes"
+            title={`${t("events.editEvent").replace("✏️ ", "")} ${event.title}`}
+            submitLabel={t("events.saveChanges")}
             initialData={event}
             onSubmit={handleSubmit}
           />

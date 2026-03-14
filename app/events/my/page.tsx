@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Event,
@@ -13,6 +14,7 @@ import EventCard from "../../components/events/EventCard";
 import { NAV_HEIGHT } from "../../constants";
 
 export default function MyEventsPage() {
+  const { t } = useTranslation();
   const [rsvpedEvents, setRsvpedEvents] = useState<Event[]>([]);
   const [rsvpedIds, setRsvpedIds] = useState<string[]>([]);
 
@@ -65,14 +67,14 @@ export default function MyEventsPage() {
             marginBottom: "1.25rem",
           }}
         >
-          ← Back to Events
+          {t("events.backToEvents")}
         </Link>
 
         <h1 style={{ fontSize: "2rem", color: "#2d3748", marginBottom: "0.25rem" }}>
-          My Events
+          {t("events.myEvents")}
         </h1>
         <p style={{ color: "#718096", marginBottom: "1.5rem" }}>
-          Events you&apos;ve RSVPed to.
+          {t("events.myEventsSubtitle")}
         </p>
 
         {rsvpedEvents.length === 0 && (
@@ -87,10 +89,10 @@ export default function MyEventsPage() {
             }}
           >
             <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>
-              You haven&apos;t RSVPed to any events yet.
+              {t("events.noRsvps")}
             </p>
             <Link href="/events" style={{ color: "#3182ce" }}>
-              Browse upcoming events →
+              {t("events.browseEvents")}
             </Link>
           </div>
         )}
@@ -107,7 +109,7 @@ export default function MyEventsPage() {
                 letterSpacing: "0.05em",
               }}
             >
-              Upcoming
+              {t("events.upcomingSection")}
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {upcoming.map((ev) => (
@@ -129,7 +131,7 @@ export default function MyEventsPage() {
                       fontFamily: "Arial, sans-serif",
                     }}
                   >
-                    Cancel RSVP
+                    {t("events.cancelRsvp")}
                   </button>
                 </div>
               ))}
@@ -149,7 +151,7 @@ export default function MyEventsPage() {
                 letterSpacing: "0.05em",
               }}
             >
-              Past Events
+              {t("events.past")}
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {past.map((ev) => (

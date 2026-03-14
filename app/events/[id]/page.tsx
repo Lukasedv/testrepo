@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Event,
@@ -22,13 +23,10 @@ import {
 import { getCategoryColor } from "../../components/events/EventCalendar";
 import { NAV_HEIGHT } from "../../constants";
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
-
-export default function EventDetailPage({ params }: Props) {
-  const { id } = use(params);
+export default function EventDetailPage() {
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [rsvped, setRsvped] = useState(false);
@@ -62,8 +60,8 @@ export default function EventDetailPage({ params }: Props) {
         }}
       >
         <div style={{ textAlign: "center" }}>
-          <p style={{ color: "#718096", fontSize: "1.1rem" }}>Event not found.</p>
-          <Link href="/events" style={{ color: "#3182ce" }}>← Back to Events</Link>
+          <p style={{ color: "#718096", fontSize: "1.1rem" }}>{t("events.notFound")}</p>
+          <Link href="/events" style={{ color: "#3182ce" }}>{t("events.backToEvents")}</Link>
         </div>
       </main>
     );
@@ -112,11 +110,9 @@ export default function EventDetailPage({ params }: Props) {
   };
 
   const handleDelete = () => {
-    // Soft-delete: update status in localStorage custom events
     const custom = getCustomEvents();
     const isMock = MOCK_EVENTS.find((e) => e.id === event.id);
     if (isMock) {
-      // Store override in custom events
       saveCustomEvents([
         ...custom.filter((e) => e.id !== event.id),
         { ...event, status: "deleted" },
@@ -171,7 +167,7 @@ export default function EventDetailPage({ params }: Props) {
             marginBottom: "1.25rem",
           }}
         >
-          ← Back to Events
+          {t("events.backToEvents")}
         </Link>
 
         <div
@@ -223,12 +219,12 @@ export default function EventDetailPage({ params }: Props) {
               </span>
               {past && (
                 <span style={{ background: "#e2e8f0", color: "#718096", fontSize: "0.75rem", fontWeight: 700, padding: "3px 10px", borderRadius: "10px", textTransform: "uppercase" }}>
-                  Past Event
+                  {t("events.pastEvent")}
                 </span>
               )}
               {adminMode && event.status === "draft" && (
                 <span style={{ background: "#fef3c7", color: "#92400e", fontSize: "0.75rem", fontWeight: 700, padding: "3px 10px", borderRadius: "10px", border: "1px solid #f6e05e" }}>
-                  Draft
+                  {t("events.draftBadge")}
                 </span>
               )}
             </div>
@@ -243,15 +239,15 @@ export default function EventDetailPage({ params }: Props) {
               <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start", color: "#4a5568", fontSize: "0.95rem" }}>
                 <span>📅</span>
                 <span>
-                  {formatEventDate(event.startAt)}
+                  {formatEventDate(event.startAt, event.timezone)}
                   {event.startAt.slice(0, 10) !== event.endAt.slice(0, 10) &&
-                    ` — ${formatEventDate(event.endAt)}`}
+                    ` — ${formatEventDate(event.endAt, event.timezone)}`}
                 </span>
               </div>
               <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", color: "#4a5568", fontSize: "0.95rem" }}>
                 <span>🕐</span>
                 <span>
-                  {formatEventTime(event.startAt)} – {formatEventTime(event.endAt)} ({event.timezone})
+                  {formatEventTime(event.startAt, event.timezone)} – {formatEventTime(event.endAt, event.timezone)} ({event.timezone})
                 </span>
               </div>
               {event.location && (
@@ -265,7 +261,7 @@ export default function EventDetailPage({ params }: Props) {
                       rel="noopener noreferrer"
                       style={{ color: "#3182ce", fontSize: "0.85rem" }}
                     >
-                      (Map)
+                      {t("events.mapLink")}
                     </a>
                   </span>
                 </div>
@@ -273,15 +269,15 @@ export default function EventDetailPage({ params }: Props) {
               <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", color: "#4a5568", fontSize: "0.95rem" }}>
                 <span>👥</span>
                 <span>
-                  {rsvpCount} RSVPs
+                  {rsvpCount} {t("events.rsvps")}
                   {event.capacity !== null && (
                     <>
-                      {" "}/{" "}{event.capacity} capacity
-                      {spotsLeft !== null && spotsLeft > 0 && ` (${spotsLeft} spots left)`}
-                      {isFull && <strong style={{ color: "#e53e3e" }}> · Event Full</strong>}
+                      {" "}/{" "}{event.capacity} {t("events.capacity")}
+                      {spotsLeft !== null && spotsLeft > 0 && ` (${spotsLeft} ${t("events.spotsLeft")})`}
+                      {isFull && <strong style={{ color: "#e53e3e" }}> · {t("events.eventFull")}</strong>}
                     </>
                   )}
-                  {event.capacity === null && " (Unlimited spots)"}
+                  {event.capacity === null && ` (${t("events.unlimited")})`}
                 </span>
               </div>
             </div>
@@ -319,7 +315,7 @@ export default function EventDetailPage({ params }: Props) {
                     transition: "background 0.15s",
                   }}
                 >
-                  {rsvped ? "Going ✓" : isFull ? "Event Full" : "RSVP"}
+                  {rsvped ? t("events.going") : isFull ? t("events.eventFull") : t("events.rsvp")}
                 </button>
 
                 {/* Add to Calendar */}
@@ -328,7 +324,7 @@ export default function EventDetailPage({ params }: Props) {
                     onClick={() => setShowCalendarMenu((v) => !v)}
                     style={secondaryBtnStyle}
                   >
-                    📆 Add to Calendar ▾
+                    {t("events.addToCalendar")}
                   </button>
                   {showCalendarMenu && (
                     <div
@@ -351,9 +347,9 @@ export default function EventDetailPage({ params }: Props) {
                         rel="noopener noreferrer"
                         style={calMenuItemStyle}
                       >
-                        Google Calendar
+                        {t("events.googleCalendar")}
                       </a>
-                      {(["Apple Calendar (.ics)", "Outlook (.ics)"] as const).map((label) => (
+                      {([t("events.appleCalendar"), t("events.outlookCalendar")] as const).map((label) => (
                         <button
                           key={label}
                           onClick={() => { handleDownloadIcs(); setShowCalendarMenu(false); }}
@@ -368,7 +364,7 @@ export default function EventDetailPage({ params }: Props) {
 
                 {/* Share */}
                 <button onClick={handleShare} style={secondaryBtnStyle}>
-                  {shareCopied ? "Link Copied! ✓" : "🔗 Share"}
+                  {shareCopied ? t("events.linkCopied") : t("events.share")}
                 </button>
               </div>
             )}
@@ -378,26 +374,26 @@ export default function EventDetailPage({ params }: Props) {
               <div
                 role="dialog"
                 aria-modal="true"
-                aria-label="Cancel RSVP"
+                aria-label={t("events.cancelRsvpTitle")}
                 style={dialogOverlayStyle}
               >
                 <div style={dialogBoxStyle}>
-                  <h3 style={{ margin: "0 0 0.75rem", color: "#2d3748" }}>Cancel RSVP?</h3>
+                  <h3 style={{ margin: "0 0 0.75rem", color: "#2d3748" }}>{t("events.cancelRsvpTitle")}</h3>
                   <p style={{ color: "#4a5568", marginBottom: "1rem" }}>
-                    Are you sure you want to cancel your RSVP for &ldquo;{event.title}&rdquo;?
+                    {t("events.cancelRsvpConfirm", { title: event.title })}
                   </p>
                   <div style={{ display: "flex", gap: "0.75rem" }}>
                     <button
                       onClick={confirmCancelRsvp}
                       style={{ padding: "0.5rem 1.2rem", background: "#e53e3e", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontFamily: "Arial, sans-serif" }}
                     >
-                      Yes, Cancel RSVP
+                      {t("events.cancelRsvpConfirmBtn")}
                     </button>
                     <button
                       onClick={() => setShowRsvpCancel(false)}
                       style={{ padding: "0.5rem 1.2rem", background: "#edf2f7", color: "#4a5568", border: "none", borderRadius: "6px", cursor: "pointer", fontFamily: "Arial, sans-serif" }}
                     >
-                      Keep RSVP
+                      {t("events.keepRsvpBtn")}
                     </button>
                   </div>
                 </div>
@@ -418,7 +414,7 @@ export default function EventDetailPage({ params }: Props) {
                 }}
               >
                 <span style={{ fontSize: "0.82rem", color: "#718096", fontWeight: 600 }}>
-                  Admin:
+                  {t("events.adminLabel")}:
                 </span>
                 <Link
                   href={`/events/${event.id}/edit`}
@@ -428,7 +424,7 @@ export default function EventDetailPage({ params }: Props) {
                     display: "inline-block",
                   }}
                 >
-                  ✏️ Edit
+                  {t("events.editEvent")}
                 </Link>
                 <button
                   onClick={handleTogglePublish}
@@ -441,7 +437,7 @@ export default function EventDetailPage({ params }: Props) {
                     cursor: "pointer",
                   }}
                 >
-                  {event.status === "published" ? "📤 Unpublish" : "📢 Publish"}
+                  {event.status === "published" ? t("events.unpublish") : t("events.publish")}
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
@@ -453,7 +449,7 @@ export default function EventDetailPage({ params }: Props) {
                     cursor: "pointer",
                   }}
                 >
-                  🗑 Delete
+                  {t("events.deleteEvent")}
                 </button>
               </div>
             )}
@@ -463,17 +459,17 @@ export default function EventDetailPage({ params }: Props) {
               <div
                 role="dialog"
                 aria-modal="true"
-                aria-label="Delete event"
+                aria-label={t("events.deleteEventTitle")}
                 style={dialogOverlayStyle}
               >
                 <div style={dialogBoxStyle}>
-                  <h3 style={{ margin: "0 0 0.75rem", color: "#2d3748" }}>Delete Event?</h3>
+                  <h3 style={{ margin: "0 0 0.75rem", color: "#2d3748" }}>{t("events.deleteEventTitle")}</h3>
                   <p style={{ color: "#4a5568", marginBottom: "0.5rem" }}>
-                    Are you sure you want to delete &ldquo;{event.title}&rdquo;? This action cannot be undone.
+                    {t("events.deleteConfirm", { title: event.title })}
                   </p>
                   {rsvpCount > 0 && (
                     <p style={{ color: "#e53e3e", fontSize: "0.9rem", marginBottom: "1rem" }}>
-                      ⚠️ {rsvpCount} people have RSVPed. Deleting will notify them.
+                      {t("events.deleteRsvpWarning", { count: rsvpCount })}
                     </p>
                   )}
                   <div style={{ display: "flex", gap: "0.75rem" }}>
@@ -481,13 +477,13 @@ export default function EventDetailPage({ params }: Props) {
                       onClick={handleDelete}
                       style={{ padding: "0.5rem 1.2rem", background: "#e53e3e", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontFamily: "Arial, sans-serif" }}
                     >
-                      Delete Event
+                      {t("events.deleteEventBtn")}
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(false)}
                       style={{ padding: "0.5rem 1.2rem", background: "#edf2f7", color: "#4a5568", border: "none", borderRadius: "6px", cursor: "pointer", fontFamily: "Arial, sans-serif" }}
                     >
-                      Cancel
+                      {t("events.cancel")}
                     </button>
                   </div>
                 </div>

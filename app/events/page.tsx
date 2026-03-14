@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Event,
@@ -10,6 +11,7 @@ import {
   getStoredRsvps,
   isPastEvent,
   isAdmin,
+  setAdmin,
 } from "../lib/eventData";
 import EventCalendar from "../components/events/EventCalendar";
 import EventCard from "../components/events/EventCard";
@@ -18,6 +20,7 @@ import { NAV_HEIGHT } from "../constants";
 function EventsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const viewParam = searchParams.get("view") === "list" ? "list" : "calendar";
   const monthParam = searchParams.get("month");
@@ -26,7 +29,9 @@ function EventsContent() {
   const parseMonthParam = () => {
     if (monthParam) {
       const [y, m] = monthParam.split("-").map(Number);
-      if (!isNaN(y) && !isNaN(m)) return { year: y, month: m - 1 };
+      if (!isNaN(y) && !isNaN(m) && m >= 1 && m <= 12) {
+        return { year: y, month: m - 1 };
+      }
     }
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() };
@@ -144,6 +149,12 @@ function EventsContent() {
     router.push(`/events/${ev.id}`);
   };
 
+  const handleAdminToggle = () => {
+    const next = !adminMode;
+    setAdminMode(next);
+    setAdmin(next);
+  };
+
   return (
     <main
       style={{
@@ -167,32 +178,26 @@ function EventsContent() {
         >
           <div>
             <h1 style={{ margin: 0, fontSize: "2rem", color: "#2d3748" }}>
-              Events
+              {t("events.title")}
             </h1>
             <p style={{ margin: "0.25rem 0 0", color: "#718096" }}>
-              Browse, discover, and join upcoming events.
+              {t("events.subtitle")}
             </p>
           </div>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             {/* My Events link */}
             <Link href="/events/my" style={linkBtnStyle}>
-              My Events
+              {t("events.myEvents")}
             </Link>
             {/* Admin: Create Event */}
             {adminMode && (
               <Link href="/events/new" style={primaryLinkBtnStyle}>
-                + Create Event
+                {t("events.createEvent")}
               </Link>
             )}
             {/* Admin toggle (demo) */}
             <button
-              onClick={() => {
-                const next = !adminMode;
-                setAdminMode(next);
-                if (typeof window !== "undefined") {
-                  localStorage.setItem("events_admin", next ? "true" : "false");
-                }
-              }}
+              onClick={handleAdminToggle}
               style={{
                 ...linkBtnStyle,
                 background: adminMode ? "#fef3c7" : "#edf2f7",
@@ -203,7 +208,7 @@ function EventsContent() {
               }}
               title="Toggle admin mode (demo)"
             >
-              {adminMode ? "Admin On" : "Admin Off"}
+              {adminMode ? t("events.adminOn") : t("events.adminOff")}
             </button>
           </div>
         </div>
@@ -224,21 +229,21 @@ function EventsContent() {
           {/* Search */}
           <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
             <label htmlFor="event-search" style={{ color: "#4a5568", fontSize: "0.9rem", whiteSpace: "nowrap" }}>
-              🔍 Search:
+              🔍 {t("events.search")}:
             </label>
             <input
               id="event-search"
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by title, description, or location…"
+              placeholder={t("events.searchPlaceholder")}
               style={inputStyle}
             />
           </div>
 
           {/* Category filter */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
-            <span style={{ color: "#4a5568", fontSize: "0.9rem" }}>🏷 Category:</span>
+            <span style={{ color: "#4a5568", fontSize: "0.9rem" }}>🏷 {t("events.category")}:</span>
             {EVENT_CATEGORIES.map((cat) => (
               <button
                 key={cat}
@@ -273,7 +278,7 @@ function EventsContent() {
                   cursor: "pointer",
                 }}
               >
-                Clear filters ✕
+                {t("events.clearFilters")}
               </button>
             )}
           </div>
@@ -302,10 +307,9 @@ function EventsContent() {
                 cursor: "pointer",
                 fontSize: "0.9rem",
                 fontFamily: "Arial, sans-serif",
-                textTransform: "capitalize",
               }}
             >
-              {v === "calendar" ? "📅 Calendar" : "☰ List"}
+              {v === "calendar" ? t("events.calendarView") : t("events.listView")}
             </button>
           ))}
         </div>
@@ -347,10 +351,10 @@ function EventsContent() {
                 }}
               >
                 <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>
-                  No events found.
+                  {t("events.noEvents")}
                 </p>
                 <p style={{ fontSize: "0.9rem" }}>
-                  Try adjusting your search or clearing category filters.
+                  {t("events.noEventsSuggestion")}
                 </p>
               </div>
             )}
@@ -367,7 +371,7 @@ function EventsContent() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  Upcoming Events
+                  {t("events.upcoming")}
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {upcomingEvents.map((ev) => (
@@ -394,7 +398,7 @@ function EventsContent() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  Past Events
+                  {t("events.past")}
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {pastEvents.map((ev) => (
@@ -416,10 +420,11 @@ function EventsContent() {
 }
 
 export default function EventsPage() {
+  const { t } = useTranslation();
   return (
     <Suspense fallback={
       <main style={{ minHeight: `calc(100vh - ${NAV_HEIGHT})`, display: "flex", justifyContent: "center", alignItems: "center", fontFamily: "Arial, sans-serif" }}>
-        <p style={{ color: "#718096" }}>Loading events…</p>
+        <p style={{ color: "#718096" }}>{t("events.title")}…</p>
       </main>
     }>
       <EventsContent />
@@ -458,3 +463,4 @@ const inputStyle: React.CSSProperties = {
   color: "#2d3748",
   background: "#f7fafc",
 };
+
