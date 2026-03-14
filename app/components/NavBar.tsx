@@ -18,10 +18,6 @@ export default function NavBar() {
 
   const currentLang = i18n.language?.split("-")[0] ?? "en";
 
-  function handleLangChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    i18n.changeLanguage(event.target.value);
-  }
-
   return (
     <nav
       style={{
@@ -66,7 +62,7 @@ export default function NavBar() {
         <select
           id="language-switcher"
           value={supportedLngs.includes(currentLang as (typeof supportedLngs)[number]) ? currentLang : "en"}
-          onChange={handleLangChange}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
           aria-label={t("languageSwitcher.label")}
           style={{
             padding: "0.3rem 0.6rem",
