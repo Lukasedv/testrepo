@@ -67,6 +67,7 @@
 
 body {
   margin: 0;
+  font-family: Arial, sans-serif;
 }
 
 /* ─── Smooth theme transition — scoped to body descendants for performance ── */
