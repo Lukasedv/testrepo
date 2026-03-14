@@ -14,25 +14,26 @@ export default function Home() {
         alignItems: "center",
         minHeight: `calc(100vh - ${NAV_HEIGHT})`,
         fontFamily: "Arial, sans-serif",
-        backgroundColor: "#f0f4f8",
+        backgroundColor: "var(--color-bg-page)",
       }}
     >
       <div
         style={{
           textAlign: "center",
           padding: "2rem",
-          background: "#ffffff",
+          background: "var(--color-bg-card)",
           borderRadius: "12px",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 4px 16px var(--color-card-shadow)",
         }}
       >
-        <h1 style={{ fontSize: "3rem", color: "#2d3748", marginBottom: "0.5rem" }}>
+        <h1 style={{ fontSize: "3rem", color: "var(--color-text-heading)", marginBottom: "0.5rem" }}>
           {t("greeting")}
         </h1>
-        <p style={{ fontSize: "1.2rem", color: "#718096" }}>
+        <p style={{ fontSize: "1.2rem", color: "var(--color-text-body)" }}>
           {t("welcome")}
         </p>
       </div>
     </main>
   );
 }
+

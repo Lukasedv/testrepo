@@ -22,7 +22,7 @@ export default function LanguageSwitcher() {
     >
       <label
         htmlFor="language-switcher"
-        style={{ marginRight: "0.5rem", fontWeight: 600, color: "#2d3748" }}
+        style={{ marginRight: "0.5rem", fontWeight: 600, color: "var(--color-label-text)" }}
       >
         {t("languageSwitcher.label")}:
       </label>
@@ -34,11 +34,11 @@ export default function LanguageSwitcher() {
         style={{
           padding: "0.3rem 0.6rem",
           borderRadius: "6px",
-          border: "1px solid #cbd5e0",
+          border: "1px solid var(--color-select-border)",
           fontSize: "0.9rem",
           cursor: "pointer",
-          backgroundColor: "#fff",
-          color: "#2d3748",
+          backgroundColor: "var(--color-select-bg)",
+          color: "var(--color-select-text)",
         }}
       >
         {supportedLngs.map((lng) => (
