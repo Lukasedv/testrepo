@@ -254,8 +254,11 @@ export function isPastEvent(event: Event): boolean {
 }
 
 export function generateIcsContent(event: Event): string {
-  const formatIcsDate = (iso: string) =>
-    iso.replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  // Format ISO 8601 date to iCal UTC format: YYYYMMDDTHHMMSSZ
+  const formatIcsDate = (iso: string) => {
+    const d = new Date(iso);
+    return d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  };
   const escape = (s: string) => s.replace(/,/g, "\\,").replace(/\n/g, "\\n");
 
   return [

@@ -180,7 +180,7 @@ function EventsContent() {
             </Link>
             {/* Admin: Create Event */}
             {adminMode && (
-              <Link href="/events/new" style={{ ...linkBtnStyle, background: "#3182ce", color: "#fff", border: "none" }}>
+              <Link href="/events/new" style={primaryLinkBtnStyle}>
                 + Create Event
               </Link>
             )}
@@ -438,6 +438,13 @@ const linkBtnStyle: React.CSSProperties = {
   fontFamily: "Arial, sans-serif",
   textDecoration: "none",
   cursor: "pointer",
+};
+
+const primaryLinkBtnStyle: React.CSSProperties = {
+  ...linkBtnStyle,
+  background: "#3182ce",
+  color: "#fff",
+  border: "none",
 };
 
 const inputStyle: React.CSSProperties = {

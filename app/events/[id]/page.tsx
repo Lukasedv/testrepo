@@ -353,18 +353,15 @@ export default function EventDetailPage({ params }: Props) {
                       >
                         Google Calendar
                       </a>
-                      <button
-                        onClick={() => { handleDownloadIcs(); setShowCalendarMenu(false); }}
-                        style={{ ...calMenuItemStyle, border: "none", textAlign: "left", width: "100%", cursor: "pointer" }}
-                      >
-                        Apple Calendar (.ics)
-                      </button>
-                      <button
-                        onClick={() => { handleDownloadIcs(); setShowCalendarMenu(false); }}
-                        style={{ ...calMenuItemStyle, border: "none", textAlign: "left", width: "100%", cursor: "pointer" }}
-                      >
-                        Outlook (.ics)
-                      </button>
+                      {(["Apple Calendar (.ics)", "Outlook (.ics)"] as const).map((label) => (
+                        <button
+                          key={label}
+                          onClick={() => { handleDownloadIcs(); setShowCalendarMenu(false); }}
+                          style={{ ...calMenuItemStyle, border: "none", textAlign: "left", width: "100%", cursor: "pointer" }}
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>
