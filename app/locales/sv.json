@@ -3,7 +3,8 @@
   "welcome": "Välkommen till denna Next.js-demo.",
   "nav": {
     "home": "Hem",
-    "about": "Om oss"
+    "about": "Om oss",
+    "events": "Evenemang"
   },
   "about": {
     "title": "Om oss",
@@ -14,5 +15,37 @@
     "en": "EN",
     "fi": "FIN",
     "sv": "SWE"
+  },
+  "events": {
+    "title": "Evenemang",
+    "subtitle": "Bläddra, upptäck och gå med i kommande evenemang.",
+    "myEvents": "Mina evenemang",
+    "createEvent": "Skapa evenemang",
+    "search": "Sök",
+    "searchPlaceholder": "Sök efter titel, beskrivning eller plats…",
+    "category": "Kategori",
+    "clearFilters": "Rensa filter",
+    "calendarView": "Kalender",
+    "listView": "Lista",
+    "upcoming": "Kommande evenemang",
+    "past": "Tidigare evenemang",
+    "noEvents": "Inga evenemang hittades.",
+    "noEventsSuggestion": "Prova att justera sökningen eller rensa kategorifilter.",
+    "noEventsThisMonth": "Inga evenemang denna månad.",
+    "rsvp": "Anmäl dig",
+    "going": "Jag kommer ✓",
+    "eventFull": "Evenemanget är fullt",
+    "cancelRsvp": "Avboka",
+    "addToCalendar": "Lägg till i kalender",
+    "share": "Dela",
+    "linkCopied": "Länk kopierad! ✓",
+    "adminOn": "Admin på",
+    "adminOff": "Admin av",
+    "backToEvents": "Tillbaka till evenemang",
+    "notFound": "Evenemanget hittades inte.",
+    "spotsLeft": "platser kvar",
+    "unlimited": "Obegränsad kapacitet",
+    "rsvps": "anmälningar",
+    "capacity": "kapacitet"
   }
 }

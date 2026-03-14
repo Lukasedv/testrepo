@@ -3,7 +3,8 @@
   "welcome": "Welcome to this Next.js demo.",
   "nav": {
     "home": "Home",
-    "about": "About"
+    "about": "About",
+    "events": "Events"
   },
   "about": {
     "title": "About Us",
@@ -14,5 +15,37 @@
     "en": "EN",
     "fi": "FIN",
     "sv": "SWE"
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "Browse, discover, and join upcoming events.",
+    "myEvents": "My Events",
+    "createEvent": "Create Event",
+    "search": "Search",
+    "searchPlaceholder": "Search by title, description, or location…",
+    "category": "Category",
+    "clearFilters": "Clear filters",
+    "calendarView": "Calendar",
+    "listView": "List",
+    "upcoming": "Upcoming Events",
+    "past": "Past Events",
+    "noEvents": "No events found.",
+    "noEventsSuggestion": "Try adjusting your search or clearing category filters.",
+    "noEventsThisMonth": "No events this month.",
+    "rsvp": "RSVP",
+    "going": "Going ✓",
+    "eventFull": "Event Full",
+    "cancelRsvp": "Cancel RSVP",
+    "addToCalendar": "Add to Calendar",
+    "share": "Share",
+    "linkCopied": "Link Copied! ✓",
+    "adminOn": "Admin On",
+    "adminOff": "Admin Off",
+    "backToEvents": "Back to Events",
+    "notFound": "Event not found.",
+    "spotsLeft": "spots left",
+    "unlimited": "Unlimited spots",
+    "rsvps": "RSVPs",
+    "capacity": "capacity"
   }
 }

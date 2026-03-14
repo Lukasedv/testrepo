@@ -3,7 +3,8 @@
   "welcome": "Tervetuloa tähän Next.js-demoon.",
   "nav": {
     "home": "Etusivu",
-    "about": "Tietoja"
+    "about": "Tietoja",
+    "events": "Tapahtumat"
   },
   "about": {
     "title": "Tietoja meistä",
@@ -14,5 +15,37 @@
     "en": "EN",
     "fi": "FIN",
     "sv": "SWE"
+  },
+  "events": {
+    "title": "Tapahtumat",
+    "subtitle": "Selaa, löydä ja liity tuleviin tapahtumiin.",
+    "myEvents": "Omat tapahtumat",
+    "createEvent": "Luo tapahtuma",
+    "search": "Haku",
+    "searchPlaceholder": "Hae otsikolla, kuvauksella tai sijainnilla…",
+    "category": "Kategoria",
+    "clearFilters": "Tyhjennä suodattimet",
+    "calendarView": "Kalenteri",
+    "listView": "Lista",
+    "upcoming": "Tulevat tapahtumat",
+    "past": "Menneet tapahtumat",
+    "noEvents": "Tapahtumia ei löydy.",
+    "noEventsSuggestion": "Kokeile muuttaa hakuasi tai tyhjentää kategoriasuodattimet.",
+    "noEventsThisMonth": "Ei tapahtumia tässä kuussa.",
+    "rsvp": "Ilmoittaudu",
+    "going": "Osallistun ✓",
+    "eventFull": "Tapahtuma täynnä",
+    "cancelRsvp": "Peruuta ilmoittautuminen",
+    "addToCalendar": "Lisää kalenteriin",
+    "share": "Jaa",
+    "linkCopied": "Linkki kopioitu! ✓",
+    "adminOn": "Ylläpitäjä päällä",
+    "adminOff": "Ylläpitäjä pois",
+    "backToEvents": "Takaisin tapahtumiin",
+    "notFound": "Tapahtumaa ei löydy.",
+    "spotsLeft": "paikkaa jäljellä",
+    "unlimited": "Rajaton kapasiteetti",
+    "rsvps": "ilmoittautumista",
+    "capacity": "kapasiteetti"
   }
 }
