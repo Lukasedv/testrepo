@@ -2,12 +2,13 @@
 
 # testrepo
 
+![CI](https://github.com/Lukasedv/testrepo/actions/workflows/ci.yml/badge.svg)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A minimal **Next.js 16** demo application built with the App Router, TypeScript, internationalization (i18n), and dark/light theme support. It serves as a clean, runnable starting point for exploring modern React and Next.js patterns.
+A **Next.js 16** demo application built with the App Router, TypeScript, internationalization (i18n), dark/light theme support, and an Events page with calendar view. It serves as a clean, runnable starting point for exploring modern React and Next.js patterns.
 
 ---
 
@@ -20,6 +21,7 @@ A minimal **Next.js 16** demo application built with the App Router, TypeScript,
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Available Scripts](#available-scripts)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Internationalization](#internationalization)
 - [Theming](#theming)
 - [Contributing](#contributing)
@@ -29,7 +31,7 @@ A minimal **Next.js 16** demo application built with the App Router, TypeScript,
 
 ## Motivation
 
-Starting a new Next.js project often requires wiring up multiple concerns at once — routing, TypeScript configuration, i18n, and theme management. This repository provides a working reference implementation of all these patterns together, so you can explore how they interact or use it as a scaffold for a new project.
+Starting a new Next.js project often requires wiring up multiple concerns at once — routing, TypeScript configuration, i18n, theme management, and data-driven features. This repository provides a working reference implementation of all these patterns together, so you can explore how they interact or use it as a scaffold for a new project.
 
 ---
 
@@ -39,7 +41,9 @@ Starting a new Next.js project often requires wiring up multiple concerns at onc
 - **TypeScript** — full type safety across the codebase
 - **Internationalization (i18n)** — English, Finnish, and Swedish via `react-i18next` with automatic browser language detection
 - **Dark / Light theme** — system-preference detection with manual override, persisted in `localStorage`
+- **Events page** — list/calendar view with RSVP, search, category filtering, and admin controls
 - **Sticky navigation bar** — responsive nav with active-link highlighting and language switcher
+- **CI/CD pipeline** — GitHub Actions workflow that builds and validates every PR and push to `main`
 - **Zero external UI library dependency** — all styling is done with inline styles and CSS variables
 
 ---
@@ -132,15 +136,32 @@ The route `/contact` is immediately available — no router configuration needed
 
 ```
 testrepo/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml            # CI pipeline (build on every PR / push to main)
+│       └── nextjs.yml        # GitHub Pages deployment workflow
 ├── app/
 │   ├── about/
 │   │   └── page.tsx          # /about route
 │   ├── components/
+│   │   ├── events/
+│   │   │   ├── EventCalendar.tsx  # Monthly calendar view for events
+│   │   │   ├── EventCard.tsx      # Single event card component
+│   │   │   └── EventForm.tsx      # Create / edit event form
 │   │   ├── HtmlLangSync.tsx  # Syncs <html lang> attribute with active locale
 │   │   ├── I18nProvider.tsx  # Initialises react-i18next for client components
 │   │   ├── LanguageSwitcher.tsx # Standalone language-switcher widget
 │   │   ├── NavBar.tsx        # Sticky navigation bar
 │   │   └── ThemeProvider.tsx # Dark/light theme context and toggle
+│   ├── events/
+│   │   ├── [id]/
+│   │   │   ├── edit/page.tsx # /events/:id/edit route
+│   │   │   └── page.tsx      # /events/:id route (event detail)
+│   │   ├── my/page.tsx       # /events/my — RSVPed events
+│   │   ├── new/page.tsx      # /events/new — create event form
+│   │   └── page.tsx          # /events route — list + calendar view
+│   ├── lib/
+│   │   └── eventData.ts      # In-memory event store and helpers
 │   ├── locales/
 │   │   ├── en.json           # English translations
 │   │   ├── fi.json           # Finnish translations
@@ -165,6 +186,36 @@ testrepo/
 | `npm run build` | Build the application for production |
 | `npm start` | Start the production server (run `build` first) |
 | `npm run lint` | Run the Next.js ESLint linter |
+
+---
+
+## CI/CD Pipeline
+
+This repository uses GitHub Actions to automatically validate every pull request and push to `main`.
+
+### How it works
+
+The CI workflow (`.github/workflows/ci.yml`) runs on:
+- Every pull request targeting `main` (opened, updated, or reopened)
+- Every direct push to `main`
+
+**Steps performed by CI:**
+
+1. Check out the repository at the correct commit
+2. Set up Node.js 20
+3. Restore cached npm dependencies (keyed on `package-lock.json`)
+4. Install dependencies with `npm ci`
+5. Build the site with `npm run build`
+6. Upload the build output as a workflow artifact named `site-build` (retained for 7 days)
+
+### Interpreting CI results
+
+- ✅ **Build Site** check passes → your changes are safe to merge (pending review)
+- ❌ **Build Site** check fails → click the **Details** link next to the check to view the full build log and error output
+
+### Branch protection
+
+The `main` branch requires the **Build Site** CI check to pass before any pull request can be merged.
 
 ---
 
