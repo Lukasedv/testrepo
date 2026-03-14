@@ -14,6 +14,7 @@ export default function NavBar() {
   const navLinks = [
     { href: "/", label: t("nav.home") },
     { href: "/about", label: t("nav.about") },
+    { href: "/events", label: t("nav.events") },
   ];
 
   const currentLang = i18n.language?.split("-")[0] ?? "en";
